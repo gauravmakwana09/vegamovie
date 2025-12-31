@@ -38,4 +38,9 @@
     "tailwindcss": "^4.1.17",
     "vite": "^7.2.4"
   }
+  {
+  "scripts": {
+    "build": "[my-framework] build --output public"
+  }
+}
 }
