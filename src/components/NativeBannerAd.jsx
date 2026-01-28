@@ -10,23 +10,20 @@ const NativeBannerAd = () => {
 
         if (isMobile) return;
 
-        if (bannerRef.current && !bannerRef.current.firstChild) {
-            const script = document.createElement('script');
-            script.async = true;
-            script.dataset.cfasync = "false";
-            script.src = "//pl28221243.effectivegatecpm.com/dbd0ca03b9ec43f010008523c64c9b2b/invoke.js";
+        if (bannerRef.current) {
+            bannerRef.current.innerHTML = ''; // Clear previous content
 
-            const container = document.createElement('div');
-            container.id = "container-dbd0ca03b9ec43f010008523c64c9b2b";
+            const script = document.createElement('script');
+            script.src = "https://pl28589308.effectivegatecpm.com/0d/6d/b4/0d6db48759c8114bdfd27aeaf466758c.js";
+            script.async = true;
 
             bannerRef.current.appendChild(script);
-            bannerRef.current.appendChild(container);
         }
     }, []);
 
     return (
-        <div className="hidden md:flex justify-center my-4" ref={bannerRef}>
-            {/* Ad will be injected here */}
+        <div className="hidden md:flex justify-center my-4 w-full" ref={bannerRef}>
+            {/* Logic for ad injection */}
         </div>
     );
 };

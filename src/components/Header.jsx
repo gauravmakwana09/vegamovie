@@ -15,7 +15,7 @@ const Header = ({ onSearch }) => {
 
     return (
         <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-black/95 shadow-xl backdrop-blur-sm' : 'bg-gradient-to-b from-black/90 via-black/60 to-transparent'}`}>
-            <div className="flex items-center justify-between px-4 md:px-8 lg:px-16 py-3 md:py-4">
+            <div className="max-w-[1800px] mx-auto w-full flex items-center justify-between px-4 md:px-8 py-3 md:py-4">
                 {/* Logo - Hide on mobile when search is open */}
                 <div className={`${isSearchOpen ? 'hidden md:block' : 'block'} text-xl md:text-3xl font-bold tracking-widest cursor-pointer select-none transition-opacity duration-300`}>
                     CINE<span className="text-red-600">VERSE</span>

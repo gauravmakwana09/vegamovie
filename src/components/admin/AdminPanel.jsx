@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, RotateCcw } from 'lucide-react';
 import Sidebar from './Sidebar';
 import MainHeader from './MainHeader';
 import RecentActivitySection from './RecentActivitySection';
@@ -7,6 +7,7 @@ import SystemStatusSection from './SystemStatusSection';
 import MediaManager from './MediaManager';
 import BannerManager from './BannerManager';
 import { api } from '../../lib/api';
+import { supabase } from '../../lib/supabaseClient';
 
 // Initial data load
 const initialMovies = [];
@@ -44,6 +45,32 @@ const AdminPanel = () => {
         };
 
         fetchMedia();
+        fetchMedia();
+    }, []);
+
+    // Realtime Visitor Count Subscription
+    useEffect(() => {
+        const subscription = supabase
+            .channel('public:site_stats')
+            .on(
+                'postgres_changes',
+                {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: 'site_stats',
+                    filter: 'key_name=eq.total_visits',
+                },
+                (payload) => {
+                    if (payload.new && typeof payload.new.value === 'number') {
+                        setVisitorCount(payload.new.value);
+                    }
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(subscription);
+        };
     }, []);
 
     // CRUD Handlers for Movies
@@ -110,6 +137,18 @@ const AdminPanel = () => {
         }
     };
 
+    const handleResetVisitorCount = async () => {
+        if (window.confirm('Are you sure you want to reset the visitor count? This action cannot be undone.')) {
+            try {
+                await api.resetVisitorCount();
+                setVisitorCount(0);
+            } catch (error) {
+                console.error("Error resetting visitor count:", error);
+                alert("Failed to reset visitor count");
+            }
+        }
+    };
+
     const renderContent = () => {
         switch (activeView) {
             case 'movies':
@@ -145,12 +184,21 @@ const AdminPanel = () => {
                     <div className="bg-[#111319] rounded-xl p-6 shadow-lg border border-[#1a1d24]">
                         <h3 className="text-white font-bold text-xl mb-6">Website Settings</h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div className="bg-[#1a1d24] p-6 rounded-lg border border-white/5">
+                            <div className="bg-[#1a1d24] p-6 rounded-lg border border-white/5 relative group">
                                 <h4 className="text-gray-400 text-sm font-medium mb-2">Total Visitors</h4>
                                 <div className="text-4xl font-bold text-white">{visitorCount.toLocaleString()}</div>
-                                <div className="text-green-500 text-xs mt-2 flex items-center">
-                                    <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-                                    Live Tracking
+                                <div className="text-green-500 text-xs mt-2 flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                        Live Tracking
+                                    </div>
+                                    <button
+                                        onClick={handleResetVisitorCount}
+                                        className="text-white hover:text-red-500 transition-colors p-1 rounded-md"
+                                        title="Reset Counter"
+                                    >
+                                        <RotateCcw className="w-4 h-4" />
+                                    </button>
                                 </div>
                             </div>
                         </div>

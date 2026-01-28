@@ -122,5 +122,19 @@ export const api = {
         } catch (error) {
             return { count: 0, error };
         }
+    },
+
+    resetVisitorCount: async () => {
+        try {
+            const { error } = await supabase
+                .from('site_stats')
+                .update({ value: 0 })
+                .eq('key_name', 'total_visits');
+
+            if (error) throw error;
+            return { error: null };
+        } catch (error) {
+            return { error };
+        }
     }
 };
