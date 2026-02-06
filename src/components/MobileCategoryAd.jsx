@@ -55,7 +55,7 @@ const MobileCategoryAd = ({ showOnDesktop = false }) => {
     }, []);
 
     return (
-        <div className={`w-full px-4 my-6 flex justify-center ${showOnDesktop ? '' : 'block lg:hidden'}`}>
+        <div className={`w-full px-4 my-6 flex justify-center ${showOnDesktop ? '' : 'md:hidden'}`}>
             <div ref={adRef} className="bg-[#1a1d24] rounded-lg border border-white/5 p-4 flex items-center justify-center overflow-hidden">
                 {/* Iframe will be injected here */}
             </div>

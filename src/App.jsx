@@ -8,6 +8,7 @@ import TopBannerAd from './components/TopBannerAd';
 import SideBannerAd from './components/SideBannerAd';
 import MobileCategoryAd from './components/MobileCategoryAd';
 import AdminPanel from './components/admin/AdminPanel';
+import SEO from './components/SEO';
 import { api } from './lib/api';
 
 function App() {
@@ -167,6 +168,7 @@ function App() {
 
   return (
     <div className="bg-[#141414] min-h-screen w-full overflow-x-hidden font-sans text-white relative">
+      <SEO />
       <Header onSearch={handleSearch} />
       {error && (
         <div className="bg-red-600 text-white text-center py-2 px-4 font-bold">
